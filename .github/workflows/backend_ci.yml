@@ -129,6 +129,12 @@ jobs:
     - name: Login to Azure Container Registry
       run: az acr login --name titikshaacr01
 
+    # Explicit Docker login (ensures credentials for buildx)
+    - name: Docker Login to ACR
+      run: echo ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }} | docker login titikshaacr01.azurecr.io \
+        --username ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }} \
+        --password-stdin
+
        # Build and Push Docker image for Product Service
     - name: Build and Push Product Service Image
       run: |
